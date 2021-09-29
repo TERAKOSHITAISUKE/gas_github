@@ -58,3 +58,116 @@ function tera2_3(){
   const test = new Onigiri(data[1][0],data[1][1],data[1][2]);
   console.log(test.price);
 }
+
+/**
+ * varsion_1
+ * シートのレコード全てをクラス化したおにぎりのログを吐き出すコード
+ */
+
+ function tera2_3_1() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('シート2');
+  const data = sheet.getDataRange().getValues();
+  data.shift();
+
+  class Onigiri {
+    constructor(name, price, stock) {
+      this.name = name;
+      this.price = price;
+      this.stock = stock;
+    }
+  }
+
+  //for of 文を使って
+  for (const el of data) {
+    const item = new Onigiri(el[0], el[1], el[2]);
+    console.log(item);
+    /**
+      { name: 'ツナ、ツナマヨネーズ', price: 100, stock: 210 }
+      { name: 'しゃけ', price: 100, stock: 300 }
+      { name: '明太子', price: 110, stock: 500 }
+      { name: '梅干し', price: 100, stock: 600 }
+      { name: '昆布', price: 90, stock: 700 }
+      { name: 'かつお', price: 100, stock: 100 }
+      { name: 'たらこ', price: 130, stock: 10 }
+      { name: 'いくら', price: 150, stock: 0 }
+      { name: '天むす', price: 160, stock: 150 }
+      { name: '海老マヨネーズ', price: 100, stock: 2 }
+    */
+  }
+  
+  //mapを使って
+  const item_map = data.map(el => new Onigiri(el[0], el[1], el[2]));
+  console.log(item_map);
+
+  /**
+   * 	[ { name: 'ツナ、ツナマヨネーズ', price: 100, stock: 210 },
+      { name: 'しゃけ', price: 100, stock: 300 },
+      { name: '明太子', price: 110, stock: 500 },
+      { name: '梅干し', price: 100, stock: 600 },
+      { name: '昆布', price: 90, stock: 700 },
+      { name: 'かつお', price: 100, stock: 100 },
+      { name: 'たらこ', price: 130, stock: 10 },
+      { name: 'いくら', price: 150, stock: 0 },
+      { name: '天むす', price: 160, stock: 150 },
+      { name: '海老マヨネーズ', price: 100, stock: 2 } ]
+   */
+
+}
+
+/**-------------------------------------------------------------------------------- */
+
+
+/**
+ * version_2
+ * 関数doingのtera2_3()に
+ * 数字の引数を渡すとクラス化したおにぎりのログを吐き出すコード
+ * 
+ */
+function doing() {
+  tera2_3(1, 2, 3, 10);//引数に任意の数字を入力する
+}
+
+function tera2_3(...x) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('シート2');
+  const data = sheet.getDataRange().getValues();
+  const number_array = [...x];
+
+  //シートの最大行を越えたらアラートするif文
+  const lastRow = sheet.getLastRow();
+  const number_array_max = Math.max(...number_array);
+
+  if (lastRow < number_array_max) {
+    console.error('シートにあるレコードの最大行数を越えています。1から', lastRow - 1, 'の間でで入力し直してください')
+  } else {
+
+    class Onigiri {
+      constructor(name, price, stock) {
+        this.name = name;
+        this.price = price;
+        this.stock = stock;
+      }
+    }
+
+    //for of 文を使って
+    for (const i of number_array) {
+      const item = new Onigiri(data[i][0], data[i][1], data[i][2]);
+      console.log(item);
+      /**
+      *{ name: 'ツナ、ツナマヨネーズ', price: 100, stock: 210 }
+      *{ name: 'しゃけ', price: 100, stock: 300 }
+      *{ name: '明太子', price: 110, stock: 500 }
+      *{ name: '海老マヨネーズ', price: 100, stock: 2 }
+      */
+    }
+
+    //filterとmapを使って
+    const item_filter = data.filter((x, index) => number_array.includes(index) == true).map(el => new Onigiri(el[0], el[1], el[2]));
+    console.log(item_filter);
+    /**
+     * 	[ { name: 'ツナ、ツナマヨネーズ', price: 100, stock: 210 },
+     * { name: 'しゃけ', price: 100, stock: 300 },
+     * { name: '明太子', price: 110, stock: 500 },
+     * { name: '海老マヨネーズ', price: 100, stock: 2 } ]
+    */
+  }
+}
