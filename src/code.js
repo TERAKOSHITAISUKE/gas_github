@@ -171,3 +171,18 @@ function tera2_3(...x) {
     */
   }
 }
+
+
+function tera2_4() {
+  class Person{
+    constructor(height, weight) {
+      this.height = height;
+      this.weight = weight;
+    }
+   getBmi(){
+    return this.weight/Math.pow(this.height,2)*1e4;
+   }
+  };
+  const tera = new Person(165, 60);
+  console.log(tera.getBmi());//22.038567493112946
+}
